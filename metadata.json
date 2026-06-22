@@ -1,0 +1,6 @@
+{
+  "name": "OmniSupport AI",
+  "description": "Enterprise-grade customer support application featuring real-time telemetry, mock CRM integration, automated PII masking, and multi-turn deterministic human handoff powered by Gemini AI structured decisions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
