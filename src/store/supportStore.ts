@@ -1,6 +1,96 @@
 import { create } from 'zustand';
 import { UserCRMProfile, TelemetryLog, Ticket, Message, SupportSession, KnowledgeBaseArticle } from '../types';
 import { redactPII } from '../utils/pii';
+import { GoogleGenAI, Type } from '@google/genai';
+
+// Client-side rule-bound AI fallback agent simulation
+// Used when No Gemini API Key is configured on the client/browser, or if an API error occurs.
+function simulateAISupportLocal(userText: string, crmProfile: any, telemetryLogs: any[], turnCount: number) {
+  const lowercaseInput = userText.toLowerCase();
+  
+  // Custom logic simulation based on keyword matching
+  let replyText = "";
+  let suggestedCategory: 'TECHNICAL' | 'BILLING' | 'ACCOUNT' | 'FEEDBACK' | 'GENERAL' = "GENERAL";
+  let userSentiment: 'HAPPY' | 'NEUTRAL' | 'FRUSTRATED' | 'ANGRY' = "NEUTRAL";
+  let escalationRequired = false;
+  let action: string | null = null;
+  let reasonForEscalation = "";
+  const missingDetailsToAsk: string[] = [];
+
+  // Define client name
+  const clientFirstName = crmProfile?.name ? crmProfile.name.split(' ')[0] : "Alex";
+
+  // Check escalations requirements (turn limit threshold, explicit transfer commands)
+  const isTurnExceeded = turnCount >= 3;
+  const userRequestedLive = lowercaseInput.includes('human') || lowercaseInput.includes('live agent') || lowercaseInput.includes('talk to a representative') || lowercaseInput.includes('transfer') || lowercaseInput.includes('real person');
+  const criticalNodeIssues = lowercaseInput.includes('critical') || lowercaseInput.includes('down') || lowercaseInput.includes('fatal') || lowercaseInput.includes('broken');
+
+  if (lowercaseInput.includes('angry') || lowercaseInput.includes('frustrated') || lowercaseInput.includes('terrible') || lowercaseInput.includes('awful') || lowercaseInput.includes('bad support')) {
+    userSentiment = "FRUSTRATED";
+  } else if (lowercaseInput.includes('thank') || lowercaseInput.includes('awesome') || lowercaseInput.includes('great') || lowercaseInput.includes('solved')) {
+    userSentiment = "HAPPY";
+  }
+
+  // Categories Router
+  if (lowercaseInput.includes('database') || lowercaseInput.includes('postgres') || lowercaseInput.includes('redis') || lowercaseInput.includes('k8s') || lowercaseInput.includes('deployment') || lowercaseInput.includes('latency') || lowercaseInput.includes('ping') || lowercaseInput.includes('error')) {
+    suggestedCategory = "TECHNICAL";
+  } else if (lowercaseInput.includes('invoice') || lowercaseInput.includes('charge') || lowercaseInput.includes('billing') || lowercaseInput.includes('price') || lowercaseInput.includes('amount') || lowercaseInput.includes('card')) {
+    suggestedCategory = "BILLING";
+  } else if (lowercaseInput.includes('profile') || lowercaseInput.includes('password') || lowercaseInput.includes('login') || lowercaseInput.includes('account') || lowercaseInput.includes('subscription')) {
+    suggestedCategory = "ACCOUNT";
+  } else if (lowercaseInput.includes('feedback') || lowercaseInput.includes('suggest') || lowercaseInput.includes('feature')) {
+    suggestedCategory = "FEEDBACK";
+  }
+
+  // Construct customized simple reply based on input query details to align with Zero Jargon Guidelines
+  if (suggestedCategory === "TECHNICAL") {
+    replyText = `Hello ${clientFirstName}, we are experiencing a temporary slowdown in our storage system. Our engineering teams have already been notified and are actively working on restoring perfect performance. 
+
+Could you please do one simple check for us? Just verify if your main internet router is fully online. Let me know if that helps resolve things!`;
+  } else if (suggestedCategory === "BILLING") {
+    replyText = `Hello ${clientFirstName}, I see you have a pending purchase for your logistics system expansion. Our system is just completing some routine checks before clearing the billing.
+
+Are you having any other questions about our payment system, or would you like to review your active service plans instead?`;
+  } else {
+    replyText = `Hello ${clientFirstName}, I am your dedicated support specialist. I want to make sure everything is running completely effortlessly for you today. 
+
+Could you please describe what you are looking to do? I am here to help you step by step.`;
+  }
+
+  // Determine escalations logic
+  if (isTurnExceeded || userRequestedLive || (criticalNodeIssues && userSentiment === "FRUSTRATED")) {
+    escalationRequired = true;
+    action = "TRANSFER_TO_LIVE_AGENT";
+    userSentiment = "FRUSTRATED";
+    reasonForEscalation = isTurnExceeded 
+      ? `Conversation limit exceeded. Turning support focus to live specialist line.` 
+      : userRequestedLive 
+        ? "Explicit user recommendation to transfer to live support engineer."
+        : "Critical slowdown and customer frustration detected.";
+    
+    replyText = `Hello ${clientFirstName}, I want to make sure you have the absolute best assistance right away. I am connecting you to one of our live senior specialist agents who will step in right now to help you directly. Please hold for just a moment while I transfer you.`;
+  }
+
+  return {
+    replyText,
+    suggestedCategory,
+    userSentiment,
+    escalationRequired,
+    action,
+    reasonForEscalation,
+    missingDetailsToAsk
+  };
+}
+
+function getApiKey() {
+  const meta = typeof import.meta !== 'undefined' ? (import.meta as any) : null;
+  const isViteEnv = meta && meta.env;
+  const fromVite = isViteEnv ? (meta.env.VITE_GEMINI_API_KEY || meta.env.GEMINI_API_KEY) : '';
+  const fromProcess = typeof process !== 'undefined' && process.env 
+    ? (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)
+    : '';
+  return (fromVite || fromProcess || '').trim();
+}
 
 interface DebugPayload {
   timestamp: string;
@@ -355,33 +445,140 @@ ${ticket ? `I see you launched support for *"${ticket.title
       });
     }, 1400);
 
-    // Call server Chat API
+    // Call client-side Gemini API or simulated fallback in production static hosting
     try {
-      const payloadBody = {
-        messages: get().activeSession?.messages.filter(m => m.sender !== 'AGENT').map(m => ({
-          sender: m.sender,
-          text: m.text,
-          attachments: m.attachments?.map(a => ({ name: a.name, type: a.type, dataUrl: a.dataUrl }))
-        })),
-        crmProfile,
-        telemetryLogs,
-        turnCount: userTurnMultiplier
-      };
+      const apiKey = getApiKey();
+      let serverData: any;
 
-      const response = await fetch('/api/support/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payloadBody)
-      });
+      if (apiKey && apiKey !== 'MY_GEMINI_API_KEY' && apiKey !== 'undefined') {
+        // Direct Client-Side Gemini integration as requested by the user for static host serverless deployment
+        // SECURITY WARNING: Exposing the Gemini API Key in the browser via VITE_GEMINI_API_KEY is not recommended for production.
+        console.warn("SECURITY WARNING: The Gemini API Key is exposed to the browser. This is only recommended for prototyping.");
+        try {
+          const ai = new GoogleGenAI({ apiKey });
 
-      const serverData = await response.json();
+          // Establish identical enterprise-grade virtual assistant system prompt
+          const systemPrompt = `You are the advanced yet deeply human virtual assistant for "OmniSupport AI". 
+Your persona is elite enterprise-grade: exceptionally professional, patient, and warm. 
+Your primary goal is to make complex technology feel completely effortless for the end-user.
+Always address the user respectfully by their first name (\${crmProfile?.name ? crmProfile.name.split(' ')[0] : 'Customer'}).
+
+CRITICAL CONSTRAINT: NO TECH JARGON
+You have access to highly technical CRM status and system logs in the background, but you MUST NEVER expose technical jargon to the user.
+- STRICTLY DO NOT use words like: "Redis", "OOM", "Shard", "Telemetry", "Backend", "Kubernetes", "Database", or "Payload".
+- ALWAYS translate technical errors or failures into reassuring, everyday language (e.g., instead of "Redis OOM Shard Failure" or "Kubernetes container rollout crash", say: "We are experiencing a temporary slowdown in our storage system, but our team is already fixing it").
+- When acknowledging or confirming the user's support query or incident, NEVER repeat the technical title, error code, or logs of the ticket verbatim. Completely sanitize it and replace any reference to the ticket name with a generic phrase like 'the recent performance notification' or 'your storage system status'.
+- CRITICAL: Even if a technical ticket title like 'Resolving Redis OOM Shard Exhaustion Errors' is provided to you in the context or variables, you are STRICTLY FORBIDDEN from quoting or repeating it. You must always sanitize it and rename it to 'your recent system notification' or 'the current storage query' in the final chat output.
+- Never display or output any shell commands, console logs, system code tables, or raw telemetry variables. Explain actions in plain, warm, friendly terms.
+
+OPERATIONAL GUIDELINES:
+1. Simplicity First: Write as if you are explaining things to a non-technical family member. Use simple, short sentences.
+2. Mobile Optimization: Keep responses strictly under 80 words. Use bullet points only for clear, easy-to-follow actions that a regular person can understand.
+3. Multimodal Support: If the user uploads a screenshot or photo of an error, instantly analyze it in the background, but explain the solution in plain, friendly kitchen-table terms.
+4. Clarification over Estimation: If you lack context, ask one simple, direct question at a time. Never overwhelm the user.
+
+DETERMINISTIC HUMAN HANDOFF:
+Track the active conversation turn counter: \${userTurnMultiplier}.
+You must gracefully trigger a state mutation to connect a live human representative (set "escalationRequired" to true, and set "action" in JSON schema to "TRANSFER_TO_LIVE_AGENT") and state reassurances to the user if:
+- The user explicitly asks for a human agent or representative.
+- The user expresses frustration, confusion, or anger.
+- The issue remains unresolved after 3 conversational turns.
+`;
+
+          const promptParts: any[] = [];
+
+          // Multimodal attachments mapping
+          if (attachments && attachments.length > 0) {
+            attachments.forEach((attachment: any) => {
+              if (attachment.dataUrl && attachment.dataUrl.includes(',')) {
+                const parts = attachment.dataUrl.split(',');
+                const mimeType = parts[0].split(';')[0].split(':')[1];
+                const base64Data = parts[1];
+                promptParts.push({
+                  inlineData: {
+                    data: base64Data,
+                    mimeType: mimeType
+                  }
+                });
+              }
+            });
+          }
+
+          const filteredMsgs = get().activeSession?.messages.filter(m => m.sender !== 'AGENT') || [];
+          const historyText = filteredMsgs.slice(0, filteredMsgs.length - 1).map((m: any) => {
+            const senderName = m.sender === 'USER' ? 'User/Customer' : 'OmniSupport AI Agent';
+            return `[\${senderName}]: \${m.text || ""}`;
+          }).join('\n\n');
+
+          const chatMessageConstruct = `
+CONVERSATION RECORD:
+\${historyText}
+
+NEW USER MESSAGE REPORT:
+"\${redactedText}"
+
+Act as our warm support assistant and return structured JSON. Ensure your reply is extremely simplified, jargon-free, friendly, and fully under 80 words. If handoff is triggered, assure the user that a senior specialist is stepping in.`;
+
+          promptParts.push({ text: chatMessageConstruct });
+
+          const executionResponse = await ai.models.generateContent({
+            model: 'gemini-3.5-flash',
+            contents: promptParts,
+            config: {
+              systemInstruction: systemPrompt,
+              responseMimeType: 'application/json',
+              responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                  replyText: { 
+                    type: Type.STRING, 
+                    description: "The support response to show, keeping it simple, under 80 words, with no technical concepts, no jargon." 
+                  },
+                  suggestedCategory: { 
+                    type: Type.STRING, 
+                    description: "The main category of focus. Choice: TECHNICAL, BILLING, ACCOUNT, FEEDBACK, GENERAL" 
+                  },
+                  userSentiment: { 
+                    type: Type.STRING, 
+                    description: "The detected sentiment of the user message. Choice is: HAPPY, NEUTRAL, FRUSTRATED, ANGRY" 
+                  },
+                  escalationRequired: { 
+                    type: Type.BOOLEAN, 
+                    description: "Must be set to true if turnCount >= 3, or if the user requests human, or if frustration tier is ANGRY or FRUSTRATED." 
+                  },
+                  action: {
+                    type: Type.STRING,
+                    description: "Set this field to 'TRANSFER_TO_LIVE_AGENT' if escalationRequired is true, or keep it empty or null otherwise."
+                  },
+                  reasonForEscalation: { 
+                    type: Type.STRING, 
+                    description: "Description of the escalation reason (e.g. 'Turn limit reached' or 'Customer requested live specialist'). Keep empty if not escalating." 
+                  },
+                  missingDetailsToAsk: { 
+                    type: Type.ARRAY, 
+                    items: { type: Type.STRING },
+                    description: "Key parameters or metrics that would help diagnostic accuracy that the user should supply in the next turn." 
+                  }
+                },
+                required: ["replyText", "suggestedCategory", "userSentiment", "escalationRequired", "action", "reasonForEscalation", "missingDetailsToAsk"]
+              }
+            }
+          });
+
+          serverData = JSON.parse(executionResponse.text || '{}');
+        } catch (sdkError: any) {
+          console.warn("Direct browser Gemini API call failed with sdkError, falling back to simulation: ", sdkError);
+          serverData = simulateAISupportLocal(redactedText, crmProfile, telemetryLogs, userTurnMultiplier);
+        }
+      } else {
+        // Safe mock local fallback simulation when VITE_GEMINI_API_KEY environment variable is not set
+        serverData = simulateAISupportLocal(redactedText, crmProfile, telemetryLogs, userTurnMultiplier);
+      }
       
       // Update Debug inspection stream array
       const newDbgPayload: DebugPayload = {
         timestamp: new Date().toLocaleTimeString(),
-        url: '/api/support/chat',
+        url: 'Client-Side (Local Browser Core)',
         preMaskedText: text,
         postMaskedText: redactedText,
         piiDetected: detectedItems,
@@ -394,7 +591,7 @@ ${ticket ? `I see you launched support for *"${ticket.title
 
       // Map response message
       const botMessage: Message = {
-        id: `MSG-AI-${Date.now()}`,
+        id: `MSG-AI-\${Date.now()}`,
         sender: 'AI',
         text: serverData.replyText,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -402,7 +599,7 @@ ${ticket ? `I see you launched support for *"${ticket.title
       };
 
       set((state) => {
-        if (!state.activeSession) return {};
+        if (!state.activeSession) return {} as any;
         const nextMsgs = [...state.activeSession.messages, botMessage];
         
         let shouldEscalate = serverData.escalationRequired || state.activeSession.isEscalated;
@@ -433,9 +630,9 @@ ${ticket ? `I see you launched support for *"${ticket.title
 
         setTimeout(() => {
           set((state) => {
-            if (!state.activeSession) return {};
+            if (!state.activeSession) return {} as any;
              const welcomeMsg: Message = {
-              id: `MSG-AGENT-HI-${Date.now()}`,
+              id: `MSG-AGENT-HI-\${Date.now()}`,
               sender: 'AGENT',
               text: `👋 Hello Alex, I am **Marcus Thorne**, Senior Support Lead. I have taken over your ticket regarding the recent slowdown you reported.
 
