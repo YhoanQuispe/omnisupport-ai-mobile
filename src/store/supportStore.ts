@@ -3,6 +3,36 @@ import { UserCRMProfile, TelemetryLog, Ticket, Message, SupportSession, Knowledg
 import { redactPII } from '../utils/pii';
 import { GoogleGenAI, Type } from '@google/genai';
 
+/**
+ * Creates a dynamic system instruction for the Gemini support assistant,
+ * injecting the registered user's name as requested.
+ * Keeps "Valued User" as a fallback if userName is undefined.
+ */
+export function createDynamicChatSession(userName?: string): string {
+  const finalName = userName || "Valued User";
+  return `You are the advanced yet deeply human virtual assistant for "OmniSupport AI". 
+Your persona is elite enterprise-grade: exceptionally professional, patient, and warm. 
+Your primary goal is to make complex technology feel completely effortless for the end-user.
+Always address the user respectfully by their first name (${finalName}).
+
+CRITICAL CONSTRAINT: NO TECH JARGON
+You have access to highly technical CRM status and system logs in the background, but you MUST NEVER expose technical jargon to the user.
+- STRICTLY DO NOT use words like: "Redis", "OOM", "Shard", "Telemetry", "Backend", "Kubernetes", "Database", or "Payload".
+- ALWAYS translate technical errors or failures into reassuring, everyday language (e.g., instead of "Redis OOM Shard Failure" or "Kubernetes container rollout crash", say: "We are experiencing a temporary slowdown in our storage system, but our team is already fixing it").
+- When acknowledging or confirming the user's support query or incident, NEVER repeat the technical title, error code, or logs of the ticket verbatim. Completely sanitize it and replace any reference to the ticket name with a generic phrase like 'the recent performance notification' or 'your storage system status'.
+- CRITICAL: Even if a technical ticket title like 'Resolving Redis OOM Shard Exhaustion Errors' is provided to you in the context or variables, you are STRICTLY FORBIDDEN from quoting or repeating it. You must always sanitize it and rename it to 'your recent system notification' or 'the current storage query' in the final chat output.
+- Never display or output any shell commands, console logs, system code tables, or raw telemetry variables. Explain actions in plain, warm, friendly terms.
+
+OPERATIONAL GUIDELINES:
+1. Simplicity First: Write as if you are explaining things to a non-technical family member. Use simple, short sentences.
+2. Mobile Optimization: Keep responses strictly under 80 words. Use bullet points only for clear, easy-to-follow actions that a regular person can understand.
+3. Multimodal Support: If the user uploads a screenshot or photo of an error, instantly analyze it in the background, but explain the solution in plain, friendly kitchen-table terms.
+4. Clarification over Estimation: If you lack context, ask one simple, direct question at a time. Never overwhelm the user.
+
+DETERMINISTIC HUMAN HANDOFF:
+If the user expresses frustration, or the issue remains unresolved after 3 conversational turns, gracefully initiate a transfer to a human specialist.`;
+}
+
 // Client-side rule-bound AI fallback agent simulation
 // Used when No Gemini API Key is configured on the client/browser, or if an API error occurs.
 function simulateAISupportLocal(userText: string, crmProfile: any, telemetryLogs: any[], turnCount: number) {
@@ -18,7 +48,7 @@ function simulateAISupportLocal(userText: string, crmProfile: any, telemetryLogs
   const missingDetailsToAsk: string[] = [];
 
   // Define client name
-  const clientFirstName = crmProfile?.name ? crmProfile.name.split(' ')[0] : "Alex";
+  const clientFirstName = crmProfile?.name ? crmProfile.name.split(' ')[0] : "Valued User";
 
   // Check escalations requirements (turn limit threshold, explicit transfer commands)
   const isTurnExceeded = turnCount >= 3;
@@ -265,6 +295,7 @@ export const useSupportStore = create<SupportStore>((set, get) => ({
   clearTelemetryLogs: () => set({ telemetryLogs: [] }),
 
   initSupportSession: (ticket) => set((state) => {
+    const userFirstName = state.crmProfile?.name ? state.crmProfile.name.split(' ')[0] : "Valued User";
     const newSession: SupportSession = {
       id: `SES-${Math.floor(100000 + Math.random() * 900000)}`,
       activeTicket: ticket ? {
@@ -291,7 +322,7 @@ export const useSupportStore = create<SupportStore>((set, get) => ({
         {
           id: `MSG-INIT-${Date.now()}`,
           sender: 'AI',
-          text: `👋 Greetings, **Alex**. I am your dedicated support specialist.
+          text: `👋 Greetings, **${userFirstName}**. I am your dedicated support specialist.
 
 I have linked your session to your active system settings. Your priority service is active and fully covered.
 
@@ -364,9 +395,10 @@ ${ticket ? `I see you launched support for *"${ticket.title
       }, 2000);
 
       setTimeout(() => {
+        const userFirstName = crmProfile?.name ? crmProfile.name.split(' ')[0] : "Valued User";
         const liveResponses = [
-          "I am checking the storage settings right now, Alex. I will execute a quick system reset from our secure operations room immediately.",
-          "Alex, I see you are covered under our priority care contract. We've notified our active system engineers right away.",
+          `I am checking the storage settings right now, ${userFirstName}. I will execute a quick system reset from our secure operations room immediately.`,
+          `${userFirstName}, I see you are covered under our priority care contract. We've notified our active system engineers right away.`,
           "Understood, everything has been refreshed manually now. We are updating the central configurations for you."
         ];
         const randomLiveReply = liveResponses[Math.floor(Math.random() * liveResponses.length)];
@@ -458,32 +490,7 @@ ${ticket ? `I see you launched support for *"${ticket.title
           const ai = new GoogleGenAI({ apiKey });
 
           // Establish identical enterprise-grade virtual assistant system prompt
-          const systemPrompt = `You are the advanced yet deeply human virtual assistant for "OmniSupport AI". 
-Your persona is elite enterprise-grade: exceptionally professional, patient, and warm. 
-Your primary goal is to make complex technology feel completely effortless for the end-user.
-Always address the user respectfully by their first name (\${crmProfile?.name ? crmProfile.name.split(' ')[0] : 'Customer'}).
-
-CRITICAL CONSTRAINT: NO TECH JARGON
-You have access to highly technical CRM status and system logs in the background, but you MUST NEVER expose technical jargon to the user.
-- STRICTLY DO NOT use words like: "Redis", "OOM", "Shard", "Telemetry", "Backend", "Kubernetes", "Database", or "Payload".
-- ALWAYS translate technical errors or failures into reassuring, everyday language (e.g., instead of "Redis OOM Shard Failure" or "Kubernetes container rollout crash", say: "We are experiencing a temporary slowdown in our storage system, but our team is already fixing it").
-- When acknowledging or confirming the user's support query or incident, NEVER repeat the technical title, error code, or logs of the ticket verbatim. Completely sanitize it and replace any reference to the ticket name with a generic phrase like 'the recent performance notification' or 'your storage system status'.
-- CRITICAL: Even if a technical ticket title like 'Resolving Redis OOM Shard Exhaustion Errors' is provided to you in the context or variables, you are STRICTLY FORBIDDEN from quoting or repeating it. You must always sanitize it and rename it to 'your recent system notification' or 'the current storage query' in the final chat output.
-- Never display or output any shell commands, console logs, system code tables, or raw telemetry variables. Explain actions in plain, warm, friendly terms.
-
-OPERATIONAL GUIDELINES:
-1. Simplicity First: Write as if you are explaining things to a non-technical family member. Use simple, short sentences.
-2. Mobile Optimization: Keep responses strictly under 80 words. Use bullet points only for clear, easy-to-follow actions that a regular person can understand.
-3. Multimodal Support: If the user uploads a screenshot or photo of an error, instantly analyze it in the background, but explain the solution in plain, friendly kitchen-table terms.
-4. Clarification over Estimation: If you lack context, ask one simple, direct question at a time. Never overwhelm the user.
-
-DETERMINISTIC HUMAN HANDOFF:
-Track the active conversation turn counter: \${userTurnMultiplier}.
-You must gracefully trigger a state mutation to connect a live human representative (set "escalationRequired" to true, and set "action" in JSON schema to "TRANSFER_TO_LIVE_AGENT") and state reassurances to the user if:
-- The user explicitly asks for a human agent or representative.
-- The user expresses frustration, confusion, or anger.
-- The issue remains unresolved after 3 conversational turns.
-`;
+          const systemPrompt = createDynamicChatSession(crmProfile?.name ? crmProfile.name.split(' ')[0] : undefined);
 
           const promptParts: any[] = [];
 
@@ -631,10 +638,11 @@ Act as our warm support assistant and return structured JSON. Ensure your reply 
         setTimeout(() => {
           set((state) => {
             if (!state.activeSession) return {} as any;
-             const welcomeMsg: Message = {
-              id: `MSG-AGENT-HI-\${Date.now()}`,
+            const welcomeName = state.crmProfile?.name ? state.crmProfile.name.split(' ')[0] : "Valued User";
+            const welcomeMsg: Message = {
+              id: `MSG-AGENT-HI-${Date.now()}`,
               sender: 'AGENT',
-              text: `👋 Hello Alex, I am **Marcus Thorne**, Senior Support Lead. I have taken over your ticket regarding the recent slowdown you reported.
+              text: `👋 Hello ${welcomeName}, I am **Marcus Thorne**, Senior Support Lead. I have taken over your ticket regarding the recent slowdown you reported.
 
 I'm checking our active storage clusters in our central system right now. Let's get this resolved for you immediately.`,
               timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
