@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSupportStore } from '../store/supportStore';
 import { 
-  Search, MessageSquare, ShieldCheck, Moon, Sun, 
-  Send, Paperclip, FileUp, X, Sparkles, 
+  Search, MessageSquare, MessageSquarePlus, ShieldCheck, Moon, Sun, 
+  Send, Paperclip, FileUp, X, Sparkles, Diamond,
   ChevronRight, Phone, ArrowLeft, RefreshCw, AlertCircle, Info, Check, CheckCheck, Loader2, User, Play, LogOut, HelpCircle, CornerDownLeft,
   Menu, Terminal, Activity, ArrowRight, Sliders, Server
 } from 'lucide-react';
@@ -225,7 +225,7 @@ export default function MobileDevice() {
              onClick={() => setMobileActiveView('chat')}
              className="text-xs text-purple-500 hover:text-purple-600 flex items-center gap-1.5 font-bold cursor-pointer"
            >
-             <ArrowLeft className="w-4 h-4" />
+             <ArrowLeft strokeWidth={1.5} className="w-4 h-4" />
              <span>Back to Support Chat</span>
            </button>
            <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-bold border ${
@@ -306,7 +306,7 @@ export default function MobileDevice() {
                          {tier === 'STANDARD_FREE' && '24 Hour Target • Standard'}
                        </div>
                      </div>
-                     {mProfileTier === tier && <Check className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`} />}
+                     {mProfileTier === tier && <Check strokeWidth={1.5} className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`} />}
                    </button>
                  ))}
                </div>
@@ -316,7 +316,7 @@ export default function MobileDevice() {
                type="submit"
                className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs py-2 rounded-xl transition flex items-center justify-center gap-1.5 mt-1 cursor-pointer"
              >
-               <RefreshCw className="w-3.5 h-3.5" />
+               <RefreshCw strokeWidth={1.5} className="w-3.5 h-3.5" />
                Update CRM Profile
              </button>
            </form>
@@ -363,7 +363,7 @@ export default function MobileDevice() {
              onClick={() => setMobileActiveView('chat')}
              className="text-xs text-cyan-500 hover:text-cyan-600 flex items-center gap-1.5 font-bold cursor-pointer"
            >
-             <ArrowLeft className="w-4 h-4" />
+             <ArrowLeft strokeWidth={1.5} className="w-4 h-4" />
              <span>Back to Support Chat</span>
            </button>
            <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-bold border ${
@@ -455,7 +455,7 @@ export default function MobileDevice() {
                  }`}
                />
                <button type="submit" className="p-1.5 bg-cyan-700 rounded-lg hover:bg-cyan-600 cursor-pointer text-white shrink-0 flex items-center justify-center">
-                 <Check className="w-4 h-4 text-white" />
+                 <Check strokeWidth={1.5} className="w-4 h-4 text-white" />
                </button>
              </div>
            </form>
@@ -504,7 +504,7 @@ export default function MobileDevice() {
              onClick={() => setMobileActiveView('chat')}
              className="text-xs text-amber-500 hover:text-amber-600 flex items-center gap-1.5 font-bold cursor-pointer"
            >
-             <ArrowLeft className="w-4 h-4" />
+             <ArrowLeft strokeWidth={1.5} className="w-4 h-4" />
              <span>Back to Support Chat</span>
            </button>
            <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-bold border ${
@@ -524,7 +524,7 @@ export default function MobileDevice() {
 
            {debugPayloads.length === 0 ? (
              <div className={`text-center py-10 border border-dashed rounded-xl ${theme === 'dark' ? 'border-slate-800 bg-slate-900/10' : 'border-slate-300 bg-slate-50/50'}`}>
-               <ShieldCheck className="w-8 h-8 text-slate-400 mx-auto mb-1.5" />
+               <ShieldCheck strokeWidth={1.5} className="w-8 h-8 text-slate-400 mx-auto mb-1.5" />
                <p className={`text-[10px] font-sans ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>No API requests recorded yet. Start chat queries to view live logs.</p>
              </div>
            ) : (
@@ -532,7 +532,7 @@ export default function MobileDevice() {
                <div className={`space-y-2 p-3 rounded-2xl border ${theme === 'dark' ? 'bg-[#050c26] border-slate-800/80' : 'bg-slate-50 border-slate-200 shadow-xs'}`}>
                  <div className={`flex justify-between items-center border-b pb-1.5 ${theme === 'dark' ? 'border-slate-800/40' : 'border-slate-200'}`}>
                    <span className="text-[10px] font-mono font-bold text-amber-500 flex items-center gap-1">
-                     <ShieldCheck className="w-3.5 h-3.5" /> Captured Trace Link
+                     <ShieldCheck strokeWidth={1.5} className="w-3.5 h-3.5" /> Captured Trace Link
                    </span>
                    <span className={`text-[8px] font-mono ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>{debugPayloads[0].timestamp}</span>
                  </div>
@@ -584,7 +584,7 @@ export default function MobileDevice() {
                            <span className="px-1 py-0.2 rounded text-[7px] font-bold uppercase bg-amber-500 text-slate-950">{item.type}</span>
                            <span className={`font-bold truncate max-w-[80px] ${theme === 'dark' ? 'text-rose-450' : 'text-rose-700'}`}>"{item.original}"</span>
                          </div>
-                         <ArrowRight className="w-3 h-3 text-slate-500 shrink-0 mx-1" />
+                         <ArrowRight strokeWidth={1.5} className="w-3 h-3 text-slate-500 shrink-0 mx-1" />
                          <span className={`font-bold truncate max-w-[100px] text-right ${theme === 'dark' ? 'text-emerald-400' : 'text-emerald-700'}`}>"{item.replacement}"</span>
                        </div>
                      ))}
@@ -613,7 +613,7 @@ export default function MobileDevice() {
              onClick={() => setMobileActiveView('chat')}
              className="text-xs text-indigo-500 hover:text-indigo-600 flex items-center gap-1.5 font-bold cursor-pointer"
            >
-             <ArrowLeft className="w-4 h-4" />
+             <ArrowLeft strokeWidth={1.5} className="w-4 h-4" />
              <span>Back to Support Chat</span>
            </button>
            <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-bold border ${
@@ -642,7 +642,7 @@ export default function MobileDevice() {
                    ? 'bg-indigo-950/30 border-indigo-500/10 text-indigo-400'
                    : 'bg-indigo-50 border-indigo-100 text-indigo-700'
                }`}>
-                 <Sparkles className="w-3.5 h-3.5" /> Brand Identity Rules
+                 <Sparkles strokeWidth={1.5} className="w-3.5 h-3.5" /> Brand Identity Rules
                </span>
                <p className={`text-[10px] leading-relaxed font-sans mt-0.5 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
                  "You are 'OmniSupport LLM': elite enterprise-grade, warm, and highly professional. Never expose technical jargon such as: Redis, OOM, Shard, Kubernetes, Database."
@@ -659,7 +659,7 @@ export default function MobileDevice() {
                    ? 'bg-indigo-950/30 border-indigo-500/10 text-indigo-400'
                    : 'bg-indigo-50 border-indigo-100 text-indigo-700'
                }`}>
-                 <Sliders className="w-3.5 h-3.5" /> Structured Output Schema
+                 <Sliders strokeWidth={1.5} className="w-3.5 h-3.5" /> Structured Output Schema
                </span>
                <pre className="bg-[#020412] p-2 rounded-lg text-slate-300 text-[8px] leading-relaxed overflow-x-auto select-text font-mono">
  {`responseSchema: {
@@ -691,13 +691,13 @@ export default function MobileDevice() {
           <div className="w-2.5 h-2.5 rounded-full bg-[#050505] absolute right-4 shrink-0" />
         </div>
         {/* Signal Indicators */}
-        <div className="flex items-center gap-1.5 text-white">
+        <div className={`flex items-center gap-1.5 ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
           <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
             <path d="M12 3c-1.2 0-2.4.2-3.6.7L12 12l3.6-8.3c-1.2-.5-2.4-.7-3.6-.7zM4.5 7.5L12 21l7.5-13.5C17.3 6.3 14.7 5.5 12 5.5s-5.3.8-7.5 2z" />
           </svg>
           <span className="font-bold tracking-tighter">5G</span>
-          <div className="w-5 h-2.5 rounded-sm border border-white/60 p-[1px] flex items-center">
-            <div className="bg-emerald-400 h-full w-[85%] rounded-[1px]" />
+          <div className={`w-5 h-2.5 rounded-sm border p-[1px] flex items-center ${theme === 'dark' ? 'border-white/60' : 'border-slate-800'}`}>
+            <div className={`h-full w-[85%] rounded-[1px] ${theme === 'dark' ? 'bg-emerald-400' : 'bg-slate-800'}`} />
           </div>
         </div>
       </div>
@@ -706,7 +706,7 @@ export default function MobileDevice() {
       {!isUserAuthenticated ? (
         <div className="flex-1 bg-slate-950 flex flex-col items-center justify-center p-6 text-center z-40">
           <div className="w-16 h-16 rounded-3xl bg-purple-900/30 border border-purple-500/20 flex items-center justify-center mb-4 text-purple-400">
-            <ShieldCheck className="w-8 h-8" />
+            <ShieldCheck strokeWidth={1.5} className="w-8 h-8" />
           </div>
           <h2 className="text-xl font-bold text-slate-100 font-sans">Firebase ID Gateway</h2>
           <p className="text-xs text-slate-400 mt-2 max-w-[260px]">
@@ -723,7 +723,7 @@ export default function MobileDevice() {
 
         // Inner Smartphone Screen App Wrapper (Light/Dark transitions!)
         <div className={`flex-1 flex flex-col pt-10 font-sans relative transition-colors duration-300 ${
-          theme === 'dark' ? 'bg-[#030616] text-slate-100' : 'bg-slate-50 text-slate-900'
+          theme === 'dark' ? 'bg-[#030616] text-slate-100' : 'bg-gradient-to-b from-slate-50 via-slate-100 to-slate-200 text-slate-900'
         }`}>
 
           {/* Collapsible Mobile Sidebar Drawer (inside phone screen boundaries) */}
@@ -755,7 +755,7 @@ export default function MobileDevice() {
                     theme === 'dark' ? 'bg-[#020516] border-slate-800/60' : 'bg-slate-100 border-slate-200/60'
                   }`}>
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
+                      <Sparkles strokeWidth={1.5} className="w-4 h-4 text-purple-400 animate-pulse" />
                       <span className="font-bold text-xs uppercase tracking-wide">Control Centre</span>
                     </div>
                     <button
@@ -764,7 +764,7 @@ export default function MobileDevice() {
                         theme === 'dark' ? 'hover:bg-slate-900 text-slate-300' : 'hover:bg-slate-200 text-slate-600'
                       }`}
                     >
-                      <X className="w-4 h-4" />
+                      <X strokeWidth={1.5} className="w-4 h-4" />
                     </button>
                   </div>
 
@@ -784,7 +784,7 @@ export default function MobileDevice() {
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
-                      <MessageSquare className="w-4 h-4 text-emerald-400" />
+                      <MessageSquare strokeWidth={1.5} className="w-4 h-4 text-emerald-400" />
                       <span>Support Chat / Hub</span>
                     </button>
 
@@ -801,7 +801,7 @@ export default function MobileDevice() {
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
-                      <User className="w-4 h-4 text-purple-400" />
+                      <User strokeWidth={1.5} className="w-4 h-4 text-purple-400" />
                       <span>Mock CRM</span>
                     </button>
 
@@ -818,7 +818,7 @@ export default function MobileDevice() {
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
-                      <Activity className="w-4 h-4 text-cyan-400" />
+                      <Activity strokeWidth={1.5} className="w-4 h-4 text-cyan-400" />
                       <span>Telemetry Log</span>
                     </button>
 
@@ -835,7 +835,7 @@ export default function MobileDevice() {
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
-                      <ShieldCheck className="w-4 h-4 text-amber-500" />
+                      <ShieldCheck strokeWidth={1.5} className="w-4 h-4 text-amber-500" />
                       <span>Masking & Payloads</span>
                     </button>
 
@@ -852,7 +852,7 @@ export default function MobileDevice() {
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
-                      <Terminal className="w-4 h-4 text-indigo-400" />
+                      <Terminal strokeWidth={1.5} className="w-4 h-4 text-indigo-400" />
                       <span>Prompt Engine</span>
                     </button>
                   </div>
@@ -862,7 +862,7 @@ export default function MobileDevice() {
                   }`}>
                     <div className="p-2.5 bg-[#03112b] border border-cyan-500/10 rounded-xl text-[10px] font-mono text-cyan-400 flex flex-col gap-1 leading-relaxed">
                       <div className="flex items-center gap-1 font-bold uppercase tracking-wider text-[9px]">
-                        <ShieldCheck className="w-3 h-3" />
+                        <ShieldCheck strokeWidth={1.5} className="w-3 h-3" />
                         <span>Security Hub</span>
                       </div>
                       <p className="text-slate-400 text-[9px]">
@@ -887,7 +887,7 @@ export default function MobileDevice() {
                 }`}
                 aria-label="Toggle Navigation Side Menu"
               >
-                <Menu className="w-4.5 h-4.5" />
+                <Menu strokeWidth={1.5} className="w-4.5 h-4.5" />
               </button>
 
               {activeScreen !== 'dashboard' ? (
@@ -903,15 +903,15 @@ export default function MobileDevice() {
                     theme === 'dark' ? 'hover:bg-slate-900 text-slate-300' : 'hover:bg-slate-100 text-slate-600'
                   }`}
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ArrowLeft strokeWidth={1.5} className="w-4 h-4" />
                 </button>
               ) : null}
               
               <div>
-                <span className="text-[10px] font-mono uppercase font-bold text-purple-400 tracking-widest leading-none">Support HQ</span>
-                <h3 className="text-sm font-bold font-sans flex items-center gap-1">
+                <span className={`text-[10px] font-mono uppercase font-bold tracking-widest leading-none ${theme === 'dark' ? 'text-purple-400' : 'text-slate-700'}`}>Support HQ</span>
+                <h3 className="text-sm font-bold font-sans flex items-center gap-2">
                   OmniSupport AI
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)] flex-shrink-0" />
                 </h3>
               </div>
             </div>
@@ -925,7 +925,7 @@ export default function MobileDevice() {
                   theme === 'dark' ? 'text-slate-300 hover:bg-slate-900' : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
-                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-purple-600" />}
+                {theme === 'dark' ? <Sun strokeWidth={1.5} className="w-4 h-4 text-amber-400" /> : <Moon strokeWidth={1.5} className="w-4 h-4 text-purple-600" />}
               </button>
 
               <button 
@@ -935,7 +935,7 @@ export default function MobileDevice() {
                   theme === 'dark' ? 'text-slate-400 hover:bg-slate-900' : 'text-slate-500 hover:bg-slate-100'
                 }`}
               >
-                <LogOut className="w-4 h-4 text-rose-500" />
+                <LogOut strokeWidth={1.5} className="w-4 h-4 text-rose-500" />
               </button>
             </div>
           </header>
@@ -952,155 +952,161 @@ export default function MobileDevice() {
               <>
                 {/* SCREEN 1: CLIENT HOME DASHBOARD */}
                 {activeScreen === 'dashboard' && (
-              <div className="flex-1 overflow-y-auto p-4 space-y-5">
-                
-                {/* 1. SLA Tenant Priority Status Card */}
-                <div className={`p-4 rounded-2xl border text-xs relative overflow-hidden shadow-sm ${
-                  theme === 'dark' 
-                    ? 'bg-purple-950/20 border-purple-900/40 text-purple-100' 
-                    : 'bg-purple-50 border-purple-100 text-purple-900'
-                }`}>
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-xl translate-x-4 -translate-y-4" />
-                  <div className="flex items-center gap-1.5 mb-1.5">
-                    <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
-                    <span className="font-bold tracking-wide text-[10px] uppercase">VIP Active Agreement</span>
-                  </div>
-                  <h4 className="text-base font-bold tracking-tight">{crmProfile?.companyName}</h4>
-                  <div className={`mt-3 grid grid-cols-2 gap-2 text-[11px] font-mono leading-relaxed p-2.5 rounded-xl border ${
-                    theme === 'dark' 
-                      ? 'bg-black/20 border-white/5' 
-                      : 'bg-white/60 border-purple-200/50'
-                  }`}>
-                    <div>
-                      <span className={`block text-[10px] font-sans ${theme === 'dark' ? 'text-slate-400' : 'text-purple-700/80'}`}>Tier Level</span>
-                      <strong className="text-purple-600 dark:text-purple-400 font-sans text-xs">{crmProfile?.subscriptionTier.replace('_', ' ')}</strong>
-                    </div>
-                    <div>
-                      <span className={`block text-[10px] font-sans ${theme === 'dark' ? 'text-slate-400' : 'text-purple-700/80'}`}>SLA Commitment</span>
-                      <strong className="text-purple-600 dark:text-purple-400 font-sans text-xs">{crmProfile?.SLA_ResponseTimeMins} Min SLA Target</strong>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Real-time deployment Alert Banner */}
-                {crmProfile?.activeDeployments.some(d => d.status === 'CRITICAL') && (
-                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 flex gap-2.5 items-start text-xs text-rose-300">
-                    <AlertCircle className="w-4.5 h-4.5 shrink-0 animate-ping mt-0.5" />
-                    <div>
-                      <strong className="font-bold block">Incident Triggered — Node Outage</strong>
-                      <span className="text-[11px] leading-snug block mt-0.5 text-rose-300/80">Active unrecoverable Redis pods collapsed in EU, triggering priority support SLAs.</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* 2. Knowledge Base Search & Articles */}
-                <div className="space-y-2">
-                  <span className="text-[10px] font-mono font-bold uppercase text-slate-400 tracking-wider">Predictive Reference Base</span>
-                  <div className="relative">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                    <input
-                      type="text"
-                      placeholder="Audit kubernetes, reset keys..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className={`w-full rounded-2xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-purple-500 border ${
-                        theme === 'dark' 
-                          ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500' 
-                          : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
-                      }`}
-                    />
-                    {searchQuery && (
-                      <button 
-                        onClick={() => setSearchQuery('')}
-                        className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-200"
-                      >
-                        <X className="w-4.5 h-4.5" />
-                      </button>
-                    )}
-                  </div>
-
-                  {/* KB Search Results list */}
-                  <div className="space-y-1.5 max-h-[170px] overflow-y-auto">
-                    {filteredKb.length === 0 ? (
-                      <div className="text-center py-4 text-slate-500 text-xs font-mono">No relevant document matched.</div>
-                    ) : (
-                      filteredKb.map(art => (
-                        <button
-                          key={art.id}
-                          onClick={() => {
-                            setSelectedKbArticleId(art.id);
-                            setActiveScreen('kb');
-                          }}
-                          className={`w-full p-2.5 rounded-xl border text-left flex justify-between items-center transition ${
-                            theme === 'dark' 
-                              ? 'bg-slate-900/40 border-slate-800/40 hover:bg-slate-800/30 text-slate-300' 
-                              : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700 shadow-xs'
-                          }`}
-                        >
-                          <div className="max-w-[85%]">
-                            <h5 className={`text-xs font-bold font-sans truncate leading-snug ${theme === 'dark' ? 'text-purple-400' : 'text-purple-700'}`}>{art.title}</h5>
-                            <p className={`text-[10px] truncate font-sans mt-0.5 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>{art.summary}</p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-slate-500 shrink-0" />
-                        </button>
-                      ))
-                    )}
-                  </div>
-                </div>
-
-                {/* 3. Categorised Active Company SLA Tickets */}
-                <div className="space-y-2">
-                  <span className="text-[10px] font-mono font-bold uppercase text-slate-400 tracking-wider">Active Workspace Tickets({tickets.length})</span>
-                  <div className="space-y-2">
-                    {tickets.map(ticket => (
-                      <div
-                        key={ticket.id}
-                        onClick={() => initSupportSession(ticket)}
-                        className={`p-3 rounded-2xl border text-left block w-full outline-none transition cursor-pointer hover:border-purple-500/40 ${
-                          theme === 'dark' 
-                            ? 'bg-[#050c26]/60 border-slate-800 text-slate-200' 
-                            : 'bg-white border-slate-200 text-slate-800 shadow-xs'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold font-mono text-slate-500">#{ticket.id}</span>
-                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold font-mono ${
-                            ticket.priority === 'P0' 
-                              ? theme === 'dark' ? 'bg-rose-950/80 text-rose-400' : 'bg-rose-100 text-rose-800'
-                              : theme === 'dark' ? 'bg-slate-800 text-slate-300' : 'bg-slate-150 text-slate-700'
-                          }`}>{ticket.priority} OUTAGE</span>
+                <div className="absolute inset-0 w-full h-full overflow-hidden flex flex-col">
+                  <div className="w-full flex-1 overflow-y-auto p-4 space-y-5 pb-32">
+                    
+                    {/* 1. SLA Tenant Priority Status Card */}
+                    <div className={`p-4 rounded-2xl border text-xs relative overflow-hidden backdrop-blur-md transition-all duration-300 ${
+                      theme === 'dark' 
+                        ? 'bg-slate-900/40 border-white/[0.06] text-purple-100 shadow-sm' 
+                        : 'bg-white border-slate-200/70 border-l-[4px] border-l-purple-600 text-purple-900 shadow-[0_4px_12px_rgba(15,23,42,0.04)]'
+                    }`}>
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-xl translate-x-4 -translate-y-4" />
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <Diamond strokeWidth={1.5} className={`w-4 h-4 vip-diamond-static shrink-0 ${theme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`} />
+                        <span className={`font-medium text-[9px] uppercase tracking-[0.15em] ${theme === 'dark' ? 'text-purple-300/80' : 'text-purple-900'}`}>VIP Active Agreement</span>
+                      </div>
+                      <h4 className={`text-base font-bold tracking-tight ${theme === 'dark' ? '' : 'text-slate-900'}`}>{crmProfile?.companyName}</h4>
+                      <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] font-mono leading-relaxed">
+                        <div className={`p-2.5 rounded-xl border ${theme === 'dark' ? 'bg-purple-950/20 border-purple-500/10' : 'bg-purple-50 border-purple-100'}`}>
+                          <span className={`block text-[10px] font-sans ${theme === 'dark' ? 'text-slate-400' : 'text-slate-700'}`}>Tier Level</span>
+                          <strong className={`font-sans text-xs mt-0.5 block ${theme === 'dark' ? 'text-purple-300' : 'text-purple-900'}`}>{crmProfile?.subscriptionTier.replace('_', ' ')}</strong>
                         </div>
-                        <h4 className={`text-xs font-bold leading-normal font-sans mb-1.5 ${
-                          theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
-                        }`}>{ticket.title}</h4>
-                        <div className="flex items-center justify-between mt-2.5">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            ticket.status === 'OPEN' 
-                              ? theme === 'dark' ? 'bg-amber-950 text-amber-400' : 'bg-amber-100 text-amber-900 border border-amber-200'
-                              : ticket.status === 'IN_PROGRESS' 
-                                ? theme === 'dark' ? 'bg-cyan-950 text-cyan-400' : 'bg-cyan-100 text-cyan-900 border border-cyan-200'
-                                : theme === 'dark' ? 'bg-emerald-950 text-emerald-400' : 'bg-emerald-100 text-emerald-900 border border-emerald-200'
-                          }`}>{ticket.status}</span>
-                          <span className={`text-[10px] font-mono tracking-tight ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>{ticket.createdAt.split(' ')[0]}</span>
+                        <div className={`p-2.5 rounded-xl border ${theme === 'dark' ? 'bg-purple-950/20 border-purple-500/10' : 'bg-purple-50 border-purple-100'}`}>
+                          <span className={`block text-[10px] font-sans ${theme === 'dark' ? 'text-slate-400' : 'text-slate-700'}`}>SLA Commitment</span>
+                          <strong className={`font-sans text-xs mt-0.5 block ${theme === 'dark' ? 'text-purple-300' : 'text-purple-900'}`}>{crmProfile?.SLA_ResponseTimeMins} Min SLA Target</strong>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                {/* Bottom Floating trigger FAB replacement (Sleek minimalist style) */}
-                <div className="pt-2">
+                    {/* Real-time deployment Alert Banner */}
+                    {crmProfile?.activeDeployments.some(d => d.status === 'CRITICAL') && (
+                      <div className={`p-3 rounded-xl backdrop-blur-md border flex gap-2.5 items-start text-xs transition-all duration-300 ${theme === 'dark' ? 'bg-red-950/30 border-red-500/30 text-red-100 shadow-sm' : 'bg-white border-slate-200/70 border-l-[4px] border-l-red-600 text-red-950 shadow-[0_4px_12px_rgba(15,23,42,0.04)]'}`}>
+                        <AlertCircle strokeWidth={1.5} className={`w-4.5 h-4.5 shrink-0 mt-0.5 ${theme === 'dark' ? 'text-red-100' : 'text-red-700'}`} />
+                        <div>
+                          <strong className={`font-bold block ${theme === 'dark' ? 'text-red-100' : 'text-red-900'}`}>Incident Triggered — Node Outage</strong>
+                          <span className={`text-[11px] leading-snug block mt-0.5 ${theme === 'dark' ? 'text-red-100/80' : 'text-red-950'}`}>Active unrecoverable Redis pods collapsed in EU, triggering priority support SLAs.</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 2. Knowledge Base Search & Articles */}
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-sm bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)] flex-shrink-0" />
+                        <span className={`text-[10px] font-mono font-bold tracking-widest ${theme === 'dark' ? 'text-slate-400' : 'text-slate-800'}`}>PREDICTIVE REFERENCE BASE</span>
+                      </div>
+                      <div className="relative">
+                        <Search strokeWidth={1.5} className={`w-4 h-4 absolute left-3.5 top-3 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`} />
+                        <input
+                          type="text"
+                          placeholder="Audit kubernetes, reset keys..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className={`w-full rounded-md pl-10 pr-4 py-2.5 text-xs transition-all duration-200 ease-in-out active:scale-[0.98] focus:outline-none focus:ring-0 focus:border-purple-500/80 border ${
+                            theme === 'dark' 
+                              ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500 hover:bg-white/[0.04]' 
+                              : 'bg-white border-slate-200/80 text-slate-900 placeholder-slate-500 shadow-inner hover:bg-slate-50'
+                          }`}
+                        />
+                        {searchQuery && (
+                          <button 
+                            onClick={() => setSearchQuery('')}
+                            className={`absolute right-3.5 top-3 ${theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-800'}`}
+                          >
+                            <X strokeWidth={1.5} className="w-4.5 h-4.5" />
+                          </button>
+                        )}
+                      </div>
+
+                      {/* KB Search Results list */}
+                      <div className="space-y-1.5 max-h-[170px] overflow-y-auto">
+                        {filteredKb.length === 0 ? (
+                          <div className="text-center py-4 text-slate-500 text-xs font-mono">No relevant document matched.</div>
+                        ) : (
+                          filteredKb.map(art => (
+                            <button
+                              key={art.id}
+                              onClick={() => {
+                                setSelectedKbArticleId(art.id);
+                                setActiveScreen('kb');
+                              }}
+                              className={`w-full p-2.5 rounded-xl border text-left flex justify-between items-center transition-all duration-200 ease-in-out active:scale-[0.98] ${
+                                theme === 'dark' 
+                                  ? 'bg-slate-900/40 border-white/[0.04] hover:bg-white/[0.08] text-slate-300' 
+                                  : 'bg-white border-slate-200/70 border-l-[3px] border-l-transparent hover:border-l-purple-500 hover:bg-slate-50/80 text-slate-700 shadow-[0_4px_12px_rgba(15,23,42,0.04)]'
+                              }`}
+                            >
+                              <div className="max-w-[85%]">
+                                <h5 className={`text-xs font-bold font-sans truncate leading-snug ${theme === 'dark' ? 'text-purple-400' : 'text-purple-800'}`}>{art.title}</h5>
+                                <p className={`text-[10px] truncate font-sans mt-0.5 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>{art.summary}</p>
+                              </div>
+                              <ChevronRight strokeWidth={1.5} className={`w-4 h-4 shrink-0 transition-colors ${theme === 'dark' ? 'text-purple-400/70' : 'text-purple-500/70'}`} />
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 3. Categorised Active Company SLA Tickets */}
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-sm bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)] flex-shrink-0" />
+                        <span className={`text-[10px] font-mono font-bold tracking-widest ${theme === 'dark' ? 'text-slate-400' : 'text-slate-800'}`}>ACTIVE WORKSPACE TRACKING ({tickets.length})</span>
+                      </div>
+                      <div className="space-y-2">
+                        {tickets.map(ticket => (
+                          <div
+                            key={ticket.id}
+                            onClick={() => initSupportSession(ticket)}
+                            className={`p-3 rounded-2xl border text-left block w-full outline-none transition-all duration-200 ease-in-out active:scale-[0.98] cursor-pointer ${
+                              theme === 'dark' 
+                                ? 'bg-[#050c26]/60 border-slate-800 text-slate-200 hover:bg-white/[0.04] hover:border-purple-500/40' 
+                                : 'bg-white border-slate-200/70 border-l-[3px] border-l-slate-300 hover:border-l-purple-500 text-slate-800 shadow-[0_4px_12px_rgba(15,23,42,0.04)] hover:bg-slate-50'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`text-[10px] font-bold font-mono ${theme === 'dark' ? 'text-slate-500' : 'text-slate-700'}`}>#{ticket.id}</span>
+                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold font-mono border ${
+                                ticket.priority === 'P0' 
+                                  ? theme === 'dark' ? 'bg-red-500/10 text-red-400 border-red-500/30' : 'bg-rose-100 text-rose-800 border-rose-200'
+                                  : theme === 'dark' ? 'bg-slate-500/10 text-slate-300 border-slate-500/30' : 'bg-slate-100 text-slate-800 border-slate-300'
+                              }`}>{ticket.priority} OUTAGE</span>
+                            </div>
+                            <h4 className={`text-xs font-bold leading-normal font-sans pr-16 mb-1.5 ${
+                              theme === 'dark' ? 'text-slate-100' : 'text-indigo-950'
+                            }`}>{ticket.title}</h4>
+                            <div className="flex items-center justify-between mt-2.5">
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                                ticket.status === 'OPEN' 
+                                  ? theme === 'dark' ? 'bg-orange-500/10 text-orange-400 border-orange-500/30' : 'bg-orange-100 text-orange-800 border-orange-200'
+                                  : ticket.status === 'IN_PROGRESS' 
+                                    ? theme === 'dark' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' : 'bg-cyan-100 text-cyan-900 border-cyan-200'
+                                    : theme === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-emerald-100 text-emerald-900 border-emerald-200'
+                              }`}>{ticket.status}</span>
+                              <span className={`text-[10px] font-mono tracking-tight ${theme === 'dark' ? 'text-slate-400' : 'text-slate-700'}`}>{ticket.createdAt.split(' ')[0]}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Bottom Floating trigger FAB replacement (Sleek minimalist style) */}
                   <button
                     onClick={() => initSupportSession(null)}
-                    className="w-full py-3 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white rounded-2xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95 group shrink-0"
+                    className={`absolute bottom-6 right-6 z-[100] w-14 h-14 rounded-full flex items-center justify-center text-white transition-all duration-200 hover:scale-110 active:scale-95 group ${
+                      theme === 'dark'
+                        ? 'bg-[#1e1b4b] bg-opacity-95 border-2 border-purple-500 shadow-[0_4px_20px_rgba(168,85,247,0.4)]'
+                        : 'bg-purple-600 shadow-lg shadow-purple-500/20'
+                    }`}
+                    aria-label="New Chat"
                   >
-                    <MessageSquare className="w-4 h-4 text-white group-hover:scale-110 transition" />
-                    <span>Initialize AI Assistant</span>
+                    <MessageSquare strokeWidth={1.5} className="w-6 h-6 text-white group-hover:scale-110 transition" />
                   </button>
                 </div>
-
-              </div>
-            )}
+              )}
 
             {/* SCREEN 2: SUPPORT CONVERSATION CHAT PORTAL */}
             {activeScreen === 'chat' && (
@@ -1175,7 +1181,7 @@ export default function MobileDevice() {
                           <div className="mt-2.5 flex flex-wrap gap-1.5 border-t border-white/10 pt-2">
                             {msg.attachments.map((attach, idx) => (
                               <div key={idx} className="flex items-center gap-1.5 p-1 bg-black/20 rounded-lg text-[9px] font-mono text-slate-300">
-                                <Paperclip className="w-3 h-3" />
+                                <Paperclip strokeWidth={1.5} className="w-3 h-3" />
                                 <span className="max-w-[120px] truncate">{attach.name}</span>
                               </div>
                             ))}
@@ -1186,7 +1192,7 @@ export default function MobileDevice() {
                       {/* Display masking check comparison indicator strictly on user messages */}
                       {msg.sender === 'USER' && msg.originalText && msg.originalText !== msg.text && (
                         <div className="text-[9px] text-amber-500 font-mono mt-1 flex items-center gap-1">
-                          <ShieldCheck className="w-3 h-3" />
+                          <ShieldCheck strokeWidth={1.5} className="w-3 h-3" />
                           <span>Personally Identifiable Information Redacted</span>
                         </div>
                       )}
@@ -1218,7 +1224,7 @@ export default function MobileDevice() {
                   {isTransferringToAgent && liveAgentQueuePosition > 0 && (
                     <div className="p-4 rounded-2xl bg-[#090e24] border border-cyan-500/20 text-center space-y-3 shadow-inner my-2">
                       <div className="mx-auto w-10 h-10 rounded-full bg-cyan-950 flex items-center justify-center text-cyan-400 animate-pulse">
-                        <Phone className="w-5 h-5 animate-spin" />
+                        <Phone strokeWidth={1.5} className="w-5 h-5 animate-spin" />
                       </div>
                       <div>
                         <strong className="text-xs text-cyan-300 block">SLA Transfer Protocols Active</strong>
@@ -1239,13 +1245,13 @@ export default function MobileDevice() {
                   <div className="px-4 py-2 border-t border-slate-800 bg-[#0d122e] flex flex-wrap gap-2 shrink-0">
                     {attachedFiles.map((f, i) => (
                       <div key={i} className="flex items-center gap-1.5 py-1 px-2.5 bg-slate-900 border border-slate-800 rounded-xl text-[10px] text-slate-300 font-mono">
-                        <Paperclip className="w-3 h-3 text-cyan-400 shrink-0" />
+                        <Paperclip strokeWidth={1.5} className="w-3 h-3 text-cyan-400 shrink-0" />
                         <span className="max-w-[130px] truncate">{f.name}</span>
                         <button 
                           onClick={() => removeAttachedFile(i)}
                           className="hover:bg-slate-800 p-0.5 rounded text-rose-400 border-none inline"
                         >
-                          <X className="w-3.5 h-3.5" />
+                          <X strokeWidth={1.5} className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     ))}
@@ -1262,7 +1268,7 @@ export default function MobileDevice() {
                         onClick={() => setShowAttachmentDropdown(!showAttachmentDropdown)}
                         className="p-2 bg-slate-900 border border-slate-800 hover:text-slate-100 text-slate-400 rounded-xl shadow transition"
                       >
-                        <Paperclip className="w-4 h-4 text-purple-400 rotate-45" />
+                        <Paperclip strokeWidth={1.5} className="w-4 h-4 text-purple-400 rotate-45" />
                       </button>
 
                       {showAttachmentDropdown && (
@@ -1272,7 +1278,7 @@ export default function MobileDevice() {
                             onClick={() => injectAttachmentPreset('k8s')}
                             className="w-full p-2 hover:bg-slate-800 text-slate-300 rounded-lg text-left text-xs flex items-center gap-1.5"
                           >
-                            <FileUp className="w-3.5 h-3.5 text-cyan-400" />
+                            <FileUp strokeWidth={1.5} className="w-3.5 h-3.5 text-cyan-400" />
                             Attach Preset: K8s OOM log.png
                           </button>
                           
@@ -1281,7 +1287,7 @@ export default function MobileDevice() {
                             onClick={() => injectAttachmentPreset('invoice')}
                             className="w-full p-2 hover:bg-slate-800 text-slate-300 rounded-lg text-left text-xs flex items-center gap-1.5"
                           >
-                            <FileUp className="w-3.5 h-3.5 text-purple-400" />
+                            <FileUp strokeWidth={1.5} className="w-3.5 h-3.5 text-purple-400" />
                             Attach Preset: Invoice rejection.png
                           </button>
 
@@ -1292,7 +1298,7 @@ export default function MobileDevice() {
                             onClick={() => fileInputRef.current?.click()}
                             className="w-full p-2 hover:bg-slate-800 text-slate-300 rounded-lg text-left text-xs flex items-center gap-1.5 font-semibold"
                           >
-                            <FileUp className="w-3.5 h-3.5 text-white" />
+                            <FileUp strokeWidth={1.5} className="w-3.5 h-3.5 text-white" />
                             Upload custom screenshot...
                           </button>
                         </div>
@@ -1319,7 +1325,7 @@ export default function MobileDevice() {
                       type="submit"
                       className="p-2 bg-purple-600 hover:bg-purple-500 rounded-xl text-white shadow-xl transition cursor-pointer"
                     >
-                      <Send className="w-4 h-4" />
+                      <Send strokeWidth={1.5} className="w-4 h-4" />
                     </button>
                   </form>
 
@@ -1335,7 +1341,7 @@ export default function MobileDevice() {
                       onClick={resolveSession}
                       className="text-emerald-500 hover:text-emerald-400 font-bold flex items-center gap-0.5 border-none outline-none cursor-pointer"
                     >
-                      <Check className="w-3.5 h-3.5" />
+                      <Check strokeWidth={1.5} className="w-3.5 h-3.5" />
                       Mark Resolved
                     </button>
                   </div>
@@ -1360,7 +1366,7 @@ export default function MobileDevice() {
                         Document Guide: {art.id}
                       </span>
                       <h2 className="text-base font-bold leading-snug mt-1 font-sans">{art.title}</h2>
-                      <p className={`text-xs font-sans ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{art.summary}</p>
+                      <p className={`text-xs font-sans ${theme === 'dark' ? 'text-slate-400' : 'text-slate-700'}`}>{art.summary}</p>
                       
                       <div className={`border-t pt-3 shrink-0 ${theme === 'dark' ? 'border-slate-800/50' : 'border-slate-200'}`} />
 
