@@ -680,24 +680,28 @@ export default function MobileDevice() {
     );
   };
 
+  const isStatusBarLight = isUserAuthenticated && theme === 'light';
+
   return (
     <div className="relative w-full max-w-[395px] h-[780px] rounded-[52px] border-[12px] border-slate-900 bg-slate-950 shadow-2xl flex flex-col overflow-hidden ring-1 ring-slate-800/80">
       
       {/* 1. Device Notch & Status bar */}
-      <div className="absolute top-0 inset-x-0 h-10 bg-black/90 flex justify-between items-center px-8 z-50 text-[11px] font-mono select-none pointer-events-none">
-        <span className="text-white font-semibold font-sans">{timeStr}</span>
+      <div className={`absolute top-0 inset-x-0 h-10 flex justify-between items-center px-8 z-50 text-[11px] font-mono select-none pointer-events-none transition-colors duration-300 ${
+        isStatusBarLight ? 'bg-transparent text-slate-800' : 'bg-black/20 text-slate-200'
+      }`}>
+        <span className={`font-semibold font-sans transition-colors duration-300 ${isStatusBarLight ? 'text-slate-800' : 'text-white'}`}>{timeStr}</span>
         {/* Apple Dynamic Island or Camera Notch */}
         <div className="w-24 h-4 rounded-full bg-black shrink-0 relative mt-1.5 flex items-center justify-center">
           <div className="w-2.5 h-2.5 rounded-full bg-[#050505] absolute right-4 shrink-0" />
         </div>
         {/* Signal Indicators */}
-        <div className={`flex items-center gap-1.5 ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
+        <div className={`flex items-center gap-1.5 transition-colors duration-300 ${isStatusBarLight ? 'text-slate-800' : 'text-white'}`}>
           <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
             <path d="M12 3c-1.2 0-2.4.2-3.6.7L12 12l3.6-8.3c-1.2-.5-2.4-.7-3.6-.7zM4.5 7.5L12 21l7.5-13.5C17.3 6.3 14.7 5.5 12 5.5s-5.3.8-7.5 2z" />
           </svg>
           <span className="font-bold tracking-tighter">5G</span>
-          <div className={`w-5 h-2.5 rounded-sm border p-[1px] flex items-center ${theme === 'dark' ? 'border-white/60' : 'border-slate-800'}`}>
-            <div className={`h-full w-[85%] rounded-[1px] ${theme === 'dark' ? 'bg-emerald-400' : 'bg-slate-800'}`} />
+          <div className={`w-5 h-2.5 rounded-sm border p-[1px] flex items-center transition-colors duration-300 ${isStatusBarLight ? 'border-slate-800' : 'border-white/60'}`}>
+            <div className={`h-full w-[85%] rounded-[1px] transition-colors duration-300 ${isStatusBarLight ? 'bg-slate-800' : 'bg-emerald-400'}`} />
           </div>
         </div>
       </div>
