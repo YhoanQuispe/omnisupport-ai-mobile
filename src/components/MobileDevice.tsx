@@ -701,7 +701,7 @@ export default function MobileDevice() {
           </svg>
           <span className="font-bold tracking-tighter">5G</span>
           <div className={`w-5 h-2.5 rounded-sm border p-[1px] flex items-center transition-colors duration-300 ${isStatusBarLight ? 'border-slate-800' : 'border-white/60'}`}>
-            <div className={`h-full w-[85%] rounded-[1px] transition-colors duration-300 ${isStatusBarLight ? 'bg-slate-800' : 'bg-emerald-400'}`} />
+            <div className={`h-full w-[85%] rounded-[1px] transition-colors duration-300 ${isStatusBarLight ? 'bg-slate-800' : 'bg-white'}`} />
           </div>
         </div>
       </div>
@@ -782,13 +782,19 @@ export default function MobileDevice() {
                       }}
                       className={`w-full px-3 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center gap-2.5 transition cursor-pointer text-left ${
                         mobileActiveView === 'chat' 
-                          ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/20 font-bold' 
+                          ? theme === 'dark'
+                            ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/20 font-bold' 
+                            : 'bg-emerald-50 text-emerald-900 border border-emerald-200/60 font-bold'
                           : theme === 'dark'
-                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30 border border-transparent'
+                            : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 border border-transparent'
                       }`}
                     >
-                      <MessageSquare strokeWidth={1.5} className="w-4 h-4 text-emerald-400" />
+                      <MessageSquare strokeWidth={1.5} className={`w-4 h-4 transition-colors ${
+                        mobileActiveView === 'chat' 
+                          ? theme === 'dark' ? 'text-emerald-400' : 'text-emerald-700'
+                          : theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`} />
                       <span>Support Chat / Hub</span>
                     </button>
 
@@ -799,13 +805,19 @@ export default function MobileDevice() {
                       }}
                       className={`w-full px-3 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center gap-2.5 transition cursor-pointer text-left ${
                         mobileActiveView === 'crm' 
-                          ? 'bg-purple-900/30 text-purple-300 border border-purple-500/20 font-bold' 
+                          ? theme === 'dark'
+                            ? 'bg-purple-900/30 text-purple-300 border border-purple-500/20 font-bold' 
+                            : 'bg-purple-50 text-purple-900 border border-purple-200/60 font-bold'
                           : theme === 'dark'
-                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30 border border-transparent'
+                            : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 border border-transparent'
                       }`}
                     >
-                      <User strokeWidth={1.5} className="w-4 h-4 text-purple-400" />
+                      <User strokeWidth={1.5} className={`w-4 h-4 transition-colors ${
+                        mobileActiveView === 'crm' 
+                          ? theme === 'dark' ? 'text-purple-400' : 'text-purple-700'
+                          : theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`} />
                       <span>Mock CRM</span>
                     </button>
 
@@ -816,13 +828,19 @@ export default function MobileDevice() {
                       }}
                       className={`w-full px-3 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center gap-2.5 transition cursor-pointer text-left ${
                         mobileActiveView === 'telemetry' 
-                          ? 'bg-cyan-950/40 text-cyan-300 border border-cyan-500/20 font-bold' 
+                          ? theme === 'dark'
+                            ? 'bg-cyan-950/40 text-cyan-300 border border-cyan-500/20 font-bold' 
+                            : 'bg-cyan-50 text-cyan-900 border border-cyan-200/60 font-bold'
                           : theme === 'dark'
-                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30 border border-transparent'
+                            : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 border border-transparent'
                       }`}
                     >
-                      <Activity strokeWidth={1.5} className="w-4 h-4 text-cyan-400" />
+                      <Activity strokeWidth={1.5} className={`w-4 h-4 transition-colors ${
+                        mobileActiveView === 'telemetry' 
+                          ? theme === 'dark' ? 'text-cyan-400' : 'text-cyan-700'
+                          : theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`} />
                       <span>Telemetry Log</span>
                     </button>
 
@@ -833,13 +851,19 @@ export default function MobileDevice() {
                       }}
                       className={`w-full px-3 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center gap-2.5 transition cursor-pointer text-left ${
                         mobileActiveView === 'pii' 
-                          ? 'bg-amber-950/30 text-amber-300 border border-amber-500/20 font-bold' 
+                          ? theme === 'dark'
+                            ? 'bg-amber-950/30 text-amber-300 border border-amber-500/20 font-bold' 
+                            : 'bg-amber-50 text-amber-900 border border-amber-200/60 font-bold'
                           : theme === 'dark'
-                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30 border border-transparent'
+                            : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 border border-transparent'
                       }`}
                     >
-                      <ShieldCheck strokeWidth={1.5} className="w-4 h-4 text-amber-500" />
+                      <ShieldCheck strokeWidth={1.5} className={`w-4 h-4 transition-colors ${
+                        mobileActiveView === 'pii' 
+                          ? theme === 'dark' ? 'text-amber-500' : 'text-amber-700'
+                          : theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`} />
                       <span>Masking & Payloads</span>
                     </button>
 
@@ -850,13 +874,19 @@ export default function MobileDevice() {
                       }}
                       className={`w-full px-3 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center gap-2.5 transition cursor-pointer text-left ${
                         mobileActiveView === 'prompts' 
-                          ? 'bg-indigo-950/30 text-indigo-300 border border-indigo-500/20 font-bold' 
+                          ? theme === 'dark'
+                            ? 'bg-indigo-950/30 text-indigo-300 border border-indigo-500/20 font-bold' 
+                            : 'bg-indigo-50 text-indigo-900 border border-indigo-200/60 font-bold'
                           : theme === 'dark'
-                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/30 border border-transparent'
+                            : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 border border-transparent'
                       }`}
                     >
-                      <Terminal strokeWidth={1.5} className="w-4 h-4 text-indigo-400" />
+                      <Terminal strokeWidth={1.5} className={`w-4 h-4 transition-colors ${
+                        mobileActiveView === 'prompts' 
+                          ? theme === 'dark' ? 'text-indigo-400' : 'text-indigo-700'
+                          : theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`} />
                       <span>Prompt Engine</span>
                     </button>
                   </div>
@@ -864,12 +894,18 @@ export default function MobileDevice() {
                   <div className={`p-4 border-t ${
                     theme === 'dark' ? 'bg-[#020516] border-slate-800' : 'bg-slate-50 border-slate-200'
                   }`}>
-                    <div className="p-2.5 bg-[#03112b] border border-cyan-500/10 rounded-xl text-[10px] font-mono text-cyan-400 flex flex-col gap-1 leading-relaxed">
+                    <div className={`p-2.5 border rounded-xl text-[10px] font-mono flex flex-col gap-1 leading-relaxed transition-colors duration-300 ${
+                      theme === 'dark'
+                        ? 'bg-[#03112b] border-cyan-500/10 text-cyan-400'
+                        : 'bg-cyan-50/50 border-cyan-200 text-cyan-800'
+                    }`}>
                       <div className="flex items-center gap-1 font-bold uppercase tracking-wider text-[9px]">
                         <ShieldCheck strokeWidth={1.5} className="w-3 h-3" />
                         <span>Security Hub</span>
                       </div>
-                      <p className="text-slate-400 text-[9px]">
+                      <p className={`text-[9px] transition-colors duration-300 ${
+                        theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                      }`}>
                         Syncs control modules inside your AI workspace dynamically.
                       </p>
                     </div>
